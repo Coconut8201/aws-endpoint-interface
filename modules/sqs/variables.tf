@@ -12,3 +12,9 @@ variable "vpc_endpoint_id" {
   description = "VPC Endpoint ID for SQS access restriction"
   type        = string
 }
+
+variable "enable_vpc_endpoint_policy" {
+  description = "Enable VPC Endpoint restriction policy on SQS queue"
+  type        = bool
+  default     = true
+}

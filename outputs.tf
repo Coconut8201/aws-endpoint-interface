@@ -45,3 +45,19 @@ output "vpc_endpoint_state" {
   description = "The state of the VPC endpoint"
   value       = module.vpc-endpoint.vpc_endpoint_state
 }
+
+# IAM Outputs
+output "ec2_instance_profile_name" {
+  description = "Name of the IAM instance profile for EC2"
+  value       = module.iam.instance_profile_name
+}
+
+output "ec2_instance_profile_arn" {
+  description = "ARN of the IAM instance profile for EC2"
+  value       = module.iam.instance_profile_arn
+}
+
+output "ec2_iam_role_name" {
+  description = "Name of the IAM role for EC2"
+  value       = module.iam.role_name
+}

@@ -40,3 +40,5 @@ terraform.rc
 *.backup
 *.bak
 *.tmp
+
+.claude/

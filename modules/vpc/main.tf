@@ -68,6 +68,14 @@ resource "aws_security_group" "sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  # Allow HTTPS from VPC CIDR (for VPC Endpoint access)
+  ingress {
+    description = "Allow HTTPS from VPC for VPC Endpoint"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = [var.vpc_cidr_block]
+  }
 
   # Allow all outbound traffic
   egress {

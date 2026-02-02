@@ -15,11 +15,31 @@ resource "aws_sqs_queue" "standard_queue" {
 
 # SQS Queue Policy - 只允許從 VPC Endpoint 存取
 resource "aws_sqs_queue_policy" "vpc_endpoint_only" {
+  count = var.enable_vpc_endpoint_policy ? 1 : 0
+
   queue_url = aws_sqs_queue.standard_queue.id
 
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
+      {
+        Sid       = "AllowFromVPCEndpoint"
+        Effect    = "Allow"
+        Principal = "*"
+        Action = [
+          "sqs:SendMessage",
+          "sqs:ReceiveMessage",
+          "sqs:DeleteMessage",
+          "sqs:GetQueueUrl",
+          "sqs:GetQueueAttributes"
+        ]
+        Resource = aws_sqs_queue.standard_queue.arn
+        Condition = {
+          StringEquals = {
+            "aws:SourceVpce" = var.vpc_endpoint_id
+          }
+        }
+      },
       {
         Sid       = "DenyAllNotFromVPCEndpoint"
         Effect    = "Deny"
@@ -28,7 +48,8 @@ resource "aws_sqs_queue_policy" "vpc_endpoint_only" {
           "sqs:SendMessage",
           "sqs:ReceiveMessage",
           "sqs:DeleteMessage",
-          "sqs:GetQueueUrl"
+          "sqs:GetQueueUrl",
+          "sqs:GetQueueAttributes"
         ]
         Resource = aws_sqs_queue.standard_queue.arn
         Condition = {
